@@ -1,0 +1,67 @@
+.sidebar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  z-index: 1050;
+}
+
+.sidebar-arrow {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 1051;
+  transition: background-color 0.3s ease;
+}
+
+.custom-offcanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  background-color: #343a40;
+  height: 100vh;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  transform: translateX(-100%);
+  z-index: 1050;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.custom-offcanvas.open {
+  transform: translateX(0);
+}
+
+.offcanvas-body {
+  color: #f8f9fa; 
+}
+
+.offcanvas-body a {
+  color: #f8f9fa; 
+  text-decoration: none; 
+}
+
+.offcanvas-body a:hover {
+  color: #007bff; 
+}
+
+.active-link {
+  color: #f8f9fa; 
+  background-color: transparent; 
+  font-weight: bold; 
+}
+
+/* Icon color */
+.bi {
+  margin-right: 10px;
+  color: #f8f9fa;
+}
