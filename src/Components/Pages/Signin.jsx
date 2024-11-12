@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../UserContext/UserProvider';
-import './Signup.css';
+import './commonStyle.css';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });

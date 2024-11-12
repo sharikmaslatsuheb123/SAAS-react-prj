@@ -3,6 +3,7 @@ import { useData } from '../UserContext/DataContext';
 import { useUser } from '../UserContext/UserProvider';
 import './Dashboard.css'; 
 import Sidebar from '../Sidebar/Sidebar';
+import SampleSidebar from '../Sidebar/SampleSidebar';
 
 const Dashboard = () => {
   const { itemsByUser, addItem, deleteItem, increaseQty, decreaseQty } = useData();
@@ -32,7 +33,7 @@ const Dashboard = () => {
   };
   return (
     <div className={`app-container ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-      <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      <SampleSidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <div className="dashboard-content">
         <div className="dashboard-container container mt-5 p-4">
           <h1 className="dashboard-title text-center mb-4">Dashboard</h1>

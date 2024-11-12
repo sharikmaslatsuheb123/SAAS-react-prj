@@ -2,78 +2,35 @@ import React from 'react';
 import './Clients.css';
 
 const clients = [
-  {
-    id: 1,
-    name: 'John Doe',
-    company: 'Tech Solutions Inc.',
-    email: 'john.doe@techsolutions.com',
-    phone: '+123 456 7890',
-    logo: 'logo', 
-  },
-  {
-    id: 2,
-    name: 'Jane Smith',
-    company: 'Innovate Labs',
-    email: 'jane.smith@innolabs.com',
-    phone: '+987 654 3210',
-    logo: 'logo',
-  },
-  {
-    id: 3,
-    name: 'Alan Brown',
-    company: 'FutureWorks',
-    email: 'alan.brown@futureworks.com',
-    phone: '+456 789 1230',
-    logo: 'logo',
-  },
-  {
-    id: 4,
-    name: 'Emily Clark',
-    company: 'Creative Minds Ltd.',
-    email: 'emily.clark@creativeminds.com',
-    phone: '+789 123 4567',
-    logo: 'logo',
-  },
+  { id: 1, logo: 'https://res.cloudinary.com/dxfq3iotg/image/upload/v1559460149/abof.png' },
+  { id: 2, logo: 'https://res.cloudinary.com/dxfq3iotg/image/upload/v1559460224/cropped-cropped-20170720-lucuLogo-squ2-e1500543540803.png' },
+  { id: 3, logo: 'https://res.cloudinary.com/dxfq3iotg/image/upload/v1559460269/104840a62d46c05d285762857fecb61a.png' },
+  { id: 4, logo: 'https://res.cloudinary.com/dxfq3iotg/image/upload/v1559460358/client-4.png' },
+  { id: 5, logo: 'https://res.cloudinary.com/dxfq3iotg/image/upload/v1559460379/client-5.png' },
+  { id: 6, logo: 'https://res.cloudinary.com/dxfq3iotg/image/upload/v1559460398/client-6.png' },
+  { id: 7, logo: 'https://res.cloudinary.com/dxfq3iotg/image/upload/v1559460418/client-7.png' },
+  // { id: 8, logo: 'https://bootstrapmade.com/demo/themes/NewBiz/img/clients/client-8.png' },
 ];
 
 const Clients = () => {
   return (
-    <div className="client-page">
-      <h2>Clients</h2>
-      <div className="client-search">
-        <input type="text" placeholder="Search clients..." />
-        <button>Search</button>
-      </div>
-      <table className="client-table">
-        <thead>
-          <tr>
-            <th>Logo</th>
-            <th>Client Name</th>
-            <th>Company</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {clients.map((client) => (
-            <tr key={client.id}>
-              <td>
-                <img src={client.logo} alt={`${client.company} logo`} className="company-logo" />
-              </td>
-              <td>{client.name}</td>
-              <td>{client.company}</td>
-              <td>{client.email}</td>
-              <td>{client.phone}</td>
-              <td>
-                <button className="btn-view">View</button>
-                <button className="btn-edit">Edit</button>
-              </td>
-            </tr>
+    <section id="clients" className="section-bg">
+      <div className="container">
+        <div className="section-header">
+          <h3>Our Clients</h3>
+          <p>Meet our happy clients</p>
+        </div>
+        <div className="clients-wrap row no-gutters clearfix wow fadeInUp">
+          {clients.map(client => (
+            <div key={client.id} className="col-lg-3 col-md-4 col-xs-6">
+              <div className="client-logo">
+                <img src={client.logo} className="img-fluid" alt={`Client ${client.id}`} />
+              </div>
+            </div>
           ))}
-        </tbody>
-      </table>
-    </div>
+        </div>
+      </div>
+    </section>
   );
 };
 

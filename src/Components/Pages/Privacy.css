@@ -1,0 +1,30 @@
+/* PrivacySafety.css */
+.privacy-safety {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .privacy-safety h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  
+  .privacy-safety h2 {
+    font-size: 1.5em;
+    margin-top: 20px;
+  }
+  
+  .privacy-safety p {
+    font-size: 1em;
+    line-height: 1.6;
+  }
+  
+  .privacy-safety ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+  
+  .privacy-safety li {
+    margin: 5px 0;
+  }
+  

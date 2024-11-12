@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useUser } from '../UserContext/UserProvider';
 import { useNavigate } from 'react-router-dom';
-import '../Pages/Signup.css';
+import '../Pages/./commonStyle.css';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
