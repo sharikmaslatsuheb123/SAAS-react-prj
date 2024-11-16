@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { getItems, addItem, deleteItem, updateItemQuantity } from '../Services/dashboardservice'; // import item services
 import { useUser } from './UserProvider';
 
 const DataContext = createContext();
@@ -7,80 +8,61 @@ export const DataProvider = ({ children }) => {
   const { user } = useUser();
   const userId = user?.email; 
 
-  const [itemsByUser, setItemsByUser] = useState(() => {
-    const savedData = localStorage.getItem('itemsByUser');
-    return savedData ? JSON.parse(savedData) : {};
-  });
+  const [itemsByUser, setItemsByUser] = useState([]);
 
+  // Fetch items when user logs in
   useEffect(() => {
-    localStorage.setItem('itemsByUser', JSON.stringify(itemsByUser));
-  }, [itemsByUser]);
+    if (userId) {
+      const fetchItems = async () => {
+        try {
+          const items = await getItems(userId); // Call the axios service to fetch items
+          setItemsByUser(items);
+        } catch (error) {
+          console.error('Error fetching items:', error);
+        }
+      };
+      fetchItems();
+    }
+  }, [userId]);
 
-  const addItem = (userId, newItem) => {
-    setItemsByUser((prevItemsByUser) => {
-      if (prevItemsByUser[userId]) {
-        // If userId already exists, add the new item to the existing array
-        return {
-          ...prevItemsByUser,
-          [userId]: [...prevItemsByUser[userId], { ...newItem, id: Date.now() }]
-        };
-      } else {
-        // If userId does not exist, create  with the new item
-        return {
-          ...prevItemsByUser,
-          [userId]: [{ ...newItem, id: Date.now() }]
-        };
-      }
-    });
+  const addNewItem = async (newItem) => {
+    try {
+      const addedItem = await addItem(userId, newItem); // Call the axios service to add item
+      setItemsByUser((prevItems) => [...prevItems, addedItem]);
+    } catch (error) {
+      console.error('Error adding item:', error);
+    }
   };
-  
 
-  const deleteItem = (userId, id) => {
-    setItemsByUser((prevItemsByUser) => {
-      if (prevItemsByUser[userId]) {
-        return {
-          ...prevItemsByUser,
-          [userId]: prevItemsByUser[userId].filter((item) => item.id !== id)
-        };
-      } else {
-        return prevItemsByUser;
-      }
-    });
+  const deleteUserItem = async (itemId) => {
+    try {
+      await deleteItem(userId, itemId); // Call the axios service to delete item
+      setItemsByUser((prevItems) => prevItems.filter(item => item.id !== itemId));
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
   };
-  
-  const increaseQty = (userId, id) => {
-    setItemsByUser((prevItemsByUser) => {
-      if (prevItemsByUser[userId]) {
-        return {
-          ...prevItemsByUser,
-          [userId]: prevItemsByUser[userId].map((item) =>
-            item.id === id ? { ...item, qty: item.qty + 1 } : item
-          )
-        };
-      } else {
-        return prevItemsByUser;
-      }
-    });
+
+  const increaseItemQty = async (itemId) => {
+    try {
+      const updatedItem = await updateItemQuantity(userId, itemId, 'increase');
+      setItemsByUser((prevItems) => prevItems.map(item => item.id === itemId ? updatedItem : item));
+    } catch (error) {
+      console.error('Error increasing item quantity:', error);
+    }
   };
-  
-  const decreaseQty = (userId, id) => {
-    setItemsByUser((prevItemsByUser) => {
-      if (prevItemsByUser[userId]) {
-        return {
-          ...prevItemsByUser,
-          [userId]: prevItemsByUser[userId].map((item) =>
-            item.id === id && item.qty > 1 ? { ...item, qty: item.qty - 1 } : item
-          )
-        };
-      } else {
-        return prevItemsByUser;
-      }
-    });
+
+  const decreaseItemQty = async (itemId) => {
+    try {
+      const updatedItem = await updateItemQuantity(userId, itemId, 'decrease');
+      setItemsByUser((prevItems) => prevItems.map(item => item.id === itemId ? updatedItem : item));
+    } catch (error) {
+      console.error('Error decreasing item quantity:', error);
+    }
   };
-  
 
   return (
-    <DataContext.Provider value={{ itemsByUser, addItem, deleteItem, increaseQty, decreaseQty }}>
+    <DataContext.Provider value={{ itemsByUser, addNewItem, deleteUserItem, increaseItemQty, decreaseItemQty }}>
       {children}
     </DataContext.Provider>
   );

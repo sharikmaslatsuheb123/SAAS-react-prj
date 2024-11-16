@@ -1,25 +1,24 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../UserContext/UserProvider';
+import { loginUser } from '../Services/userService';  // Import the login service
 import './commonStyle.css';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { login } = useUser();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = login(formData.email, formData.password);
-
-    if (success) {
-      navigate('/dashboard');
-    } else {
+    try {
+      const user = await loginUser(formData.email, formData.password);
+      localStorage.setItem('user', JSON.stringify(user));  // Save user to localStorage or use JWT
+      navigate('/dashboard');  // Navigate to dashboard on success
+    } catch (err) {
       setError('Invalid email or password');
     }
   };

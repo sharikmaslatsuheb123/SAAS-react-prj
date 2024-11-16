@@ -1,36 +1,31 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { loginUser, signupUser } from '../Services/userService'; // import the axios services
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [users, setUsers] = useState(() => {
-    // Retrieve users from localStorage 
-    const storedUsers = localStorage.getItem('users');
-    return storedUsers ? JSON.parse(storedUsers) : [
-      // { email: 'saeed@gmail.com', password: '45678', name: 'Saeed' },
-      // { email: 'aftab@gmail.com', password: '12345', name: 'Aftab' },
-    ];
-  });
+  const [error, setError] = useState('');
 
-  
+  // Check if user is already logged in
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
-    if (storedUser) setUser(JSON.parse(storedUser));
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
   }, []);
 
-  const login = (email, password) => {
-    const foundUser = users.find((u) => u.email === email && u.password === password);
-    if (foundUser) {
-      setUser(foundUser);
-      localStorage.setItem('user', JSON.stringify(foundUser));
+  const login = async (email, password) => {
+    try {
+      const userData = await loginUser(email, password); // Call the axios login service
+      setUser(userData);
+      localStorage.setItem('user', JSON.stringify(userData)); // Store user in localStorage
       navigate('/dashboard'); // Redirect to dashboard after login
       return true;
-    } else {
-      alert('Invalid credentials');
+    } catch (err) {
+      setError('Invalid credentials');
       return false;
     }
   };
@@ -41,20 +36,20 @@ export const UserProvider = ({ children }) => {
     navigate('/'); // Redirect to home after logout
   };
 
-  const signup = (newUser) => {
-    const userExists = users.some((u) => u.email === newUser.email);
-    if (userExists) {
-      alert('User already exists with this email');
-    } else {
-      const updatedUsers = [...users, newUser];
-      setUsers(updatedUsers);
-      localStorage.setItem('users', JSON.stringify(updatedUsers));
+  const signup = async (newUser) => {
+    try {
+      const userData = await signupUser(newUser); // Call the axios signup service
+      setUser(userData);
+      localStorage.setItem('user', JSON.stringify(userData)); // Store new user in localStorage
       alert('Sign up successful');
+      navigate('/signin'); // Redirect to sign-in after successful signup
+    } catch (err) {
+      setError('Error during sign-up');
     }
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout, signup }}>
+    <UserContext.Provider value={{ user, error, login, logout, signup }}>
       {children}
     </UserContext.Provider>
   );

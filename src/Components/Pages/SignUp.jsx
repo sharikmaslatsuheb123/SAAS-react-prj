@@ -1,6 +1,5 @@
-// src/Components/Pages/SignUp.js
 import React, { useState } from 'react';
-import { useUser } from '../UserContext/UserProvider';
+import { signupUser } from '../Services/userService'; // Import the signup service
 import { useNavigate } from 'react-router-dom';
 import '../Pages/./commonStyle.css';
 
@@ -11,14 +10,13 @@ const SignUp = () => {
     password: '',
     confirmPassword: '',
   });
-  const { signup } = useUser();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       alert('Passwords do not match');
@@ -29,8 +27,12 @@ const SignUp = () => {
       email: formData.email,
       password: formData.password,
     };
-    signup(newUser);
-    navigate('/signin'); 
+    try {
+      await signupUser(newUser);  // Signup user
+      navigate('/signin');  // Redirect to sign-in page on success
+    } catch (err) {
+      alert('Error signing up');
+    }
   };
 
   return (
