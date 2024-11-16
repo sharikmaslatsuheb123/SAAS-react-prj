@@ -1,22 +1,18 @@
+  
+  /* App.css */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
-/* .main-content {
-    padding-left: 0;
-    transition: padding-left 0.3s ease;
-  }
-  
-  .main-content.open {
-    padding-left: 250px; /* Adjusts content when sidebar is open */
-  /* } */
-  
-  /* @media (max-width: 768px) {
-    .main-content.open {
-      padding-left: 200px;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .main-content.open {
-      padding-left: 180px;
-    }
-  } */ 
-  
+.main-content {
+  flex: 1;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #333;
+  color: white;
+}

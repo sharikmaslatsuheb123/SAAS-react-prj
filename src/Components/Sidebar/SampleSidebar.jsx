@@ -35,10 +35,10 @@ const SampleSidebar = () => {
       </Link>
 
       {/* Orders Icon with Title */}
-      <Link to="/orders" className="sidebar-item" onClick={() => handleClick()}>
+      {/* <Link to="/orders" className="sidebar-item" onClick={() => handleClick()}>
         <AiOutlineCloudDownload className="sidebar-icon" />
         <span className="sidebar-title">Orders</span>
-      </Link>
+      </Link> */}
 
       {/* Services Icon with Title */}
       <Link to="/service" className="sidebar-item" onClick={() => handleClick()}>
