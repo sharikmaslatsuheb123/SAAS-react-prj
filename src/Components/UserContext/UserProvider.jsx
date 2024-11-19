@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginUser, signupUser } from '../Services/userService'; // import the axios services
+import { loginUser, signupUser } from '../Services/userService';
 
 const UserContext = createContext();
 
@@ -9,20 +9,16 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState('');
 
-  // Check if user is already logged in
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    if (user) {
+      navigate('/dashboard'); // Redirect to dashboard if user is logged in
     }
-  }, []);
+  }, [user, navigate]);
 
   const login = async (email, password) => {
     try {
-      const userData = await loginUser(email, password); // Call the axios login service
+      const userData = await loginUser(email, password);
       setUser(userData);
-      localStorage.setItem('user', JSON.stringify(userData)); // Store user in localStorage
-      navigate('/dashboard'); // Redirect to dashboard after login
       return true;
     } catch (err) {
       setError('Invalid credentials');
@@ -32,17 +28,15 @@ export const UserProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('user');
-    navigate('/'); // Redirect to home after logout
+    navigate('/'); // Redirect to home
   };
 
   const signup = async (newUser) => {
     try {
-      const userData = await signupUser(newUser); // Call the axios signup service
+      const userData = await signupUser(newUser);
       setUser(userData);
-      localStorage.setItem('user', JSON.stringify(userData)); // Store new user in localStorage
       alert('Sign up successful');
-      navigate('/signin'); // Redirect to sign-in after successful signup
+      navigate('/signin');
     } catch (err) {
       setError('Error during sign-up');
     }
@@ -55,4 +49,10 @@ export const UserProvider = ({ children }) => {
   );
 };
 
-export const useUser = () => useContext(UserContext);
+export const useUser = () => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error('useUser must be used within a UserProvider');
+  }
+  return context;
+};

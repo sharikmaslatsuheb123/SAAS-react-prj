@@ -31,10 +31,10 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/signin" element={<Signin />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/contact" element={<Contactus />} />
               <Route path="/service" element={<ServicePage />} />
-              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/customers" element={<Clients />} />
               {/* <Route path="/orders" element={<Orders />} /> */}
               <Route path="/privacy and safety" element={<PrivacySafety />} />

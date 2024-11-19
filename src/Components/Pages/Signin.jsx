@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../Services/userService';  // Import the login service
+import { useUser } from '../UserContext/UserProvider';  // Import the context
 import './commonStyle.css';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useUser(); // Use the login function from the context
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -14,12 +15,11 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const user = await loginUser(formData.email, formData.password);
-      localStorage.setItem('user', JSON.stringify(user));  // Save user to localStorage or use JWT
-      navigate('/dashboard');  // Navigate to dashboard on success
-    } catch (err) {
-      setError('Invalid email or password');
+    const isLoggedIn = await login(formData.email, formData.password); // Log the user in
+    if (isLoggedIn) {
+      navigate('/dashboard'); // Navigate to dashboard on successful login
+    } else {
+      setError('Invalid email or password'); // Display error if login fails
     }
   };
 

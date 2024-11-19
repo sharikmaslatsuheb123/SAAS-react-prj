@@ -12,12 +12,28 @@ export const getItems = async (userId) => {
   }
 };
 
+// export const addItem = async (userId, item) => {
+//   try {
+//     const response = await axios.post(`${BASE_URL}/${userId}`, item);
+//     return response.data; // return the added item
+//   } catch (error) {
+//     console.error('Error adding item:', error);
+//     throw error;
+//   }
+// };
+
 export const addItem = async (userId, item) => {
   try {
-    const response = await axios.post(`${BASE_URL}/${userId}`, item);
-    return response.data; // return the added item
+    
+    const response = await axios.post(`${BASE_URL}`, {
+      userId: userId,
+      itemName: item.name,
+      description: item.description || '', // Optional description
+      quantity: item.qty,
+    });
+    return response.data; // Assuming the API returns the added item
   } catch (error) {
-    console.error('Error adding item:', error);
+    console.error('Error in addItem:', error.response?.data || error.message);
     throw error;
   }
 };
@@ -41,3 +57,5 @@ export const updateItemQuantity = async (userId, itemId, quantity) => {
     throw error;
   }
 };
+
+
