@@ -12,16 +12,6 @@ export const getItems = async (userId) => {
   }
 };
 
-// export const addItem = async (userId, item) => {
-//   try {
-//     const response = await axios.post(`${BASE_URL}/${userId}`, item);
-//     return response.data; // return the added item
-//   } catch (error) {
-//     console.error('Error adding item:', error);
-//     throw error;
-//   }
-// };
-
 export const addItem = async (userId, item) => {
   try {
     
@@ -58,4 +48,18 @@ export const updateItemQuantity = async (userId, itemId, quantity) => {
   }
 };
 
-
+export const getUserById = (userId) => {
+  return axios.get(`${BASE_URL}/${userId}`)
+    .then(response => {
+      return response.data; // Return the data from the response
+    })
+    .catch(error => {
+      if (error.response) {
+        console.error('Error response data:', error.response.data);
+        console.error('Error response status:', error.response.status);
+      } else {
+        console.error('Error message:', error.message);
+      }
+      throw error; // Rethrow the error so it can be handled elsewhere
+    });
+};

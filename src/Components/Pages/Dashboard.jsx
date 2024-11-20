@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useUser } from '../UserContext/UserProvider';
-import { addItem } from '../Services/dashboardservice';
+import { addItem, getUserById } from '../Services/dashboardservice';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -22,13 +22,44 @@ const Dashboard = () => {
           description: response.item.description,
           quantity: response.item.quantity,
         };
-        setUserItems((prevItems) => [...prevItems, addedItem]); // Add item to the state
+        // Instead of directly setting the item in the state, we will fetch the updated list
         setNewItem({ name: '', description: '', qty: 1 }); // Reset the input fields
+        // Refetch the user's items after adding the new item
+        fetchUserItems(userId);
       } catch (error) {
         console.error('Error adding item:', error);
       }
     }
   };
+
+  // Fetch user items from the backend
+  const fetchUserItems = (userId) => {
+    if (userId) {
+      console.log('Fetching user items for userId:', userId); // Log userId for debugging
+
+      getUserById(userId)
+        .then((data) => {
+          console.log('Fetched user items:', data); // Log the fetched data
+          if (data && Array.isArray(data.items)) {
+            setUserItems(data.items); // Set the fetched items
+          } else {
+            console.error('Invalid data format:', data); // Log invalid data format
+            setUserItems([]); // Set to empty array if data format is incorrect
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching user items:', error); // Log the error
+          setUserItems([]); // Fallback to empty array in case of error
+        });
+    }
+  };
+
+  // useEffect to fetch user items whenever userId changes
+  useEffect(() => {
+    if (userId) {
+      fetchUserItems(userId);
+    }
+  }, [userId]); // Dependency on userId to re-fetch if it changes
 
   return (
     <div className="dashboard-container container mt-5 p-4">
