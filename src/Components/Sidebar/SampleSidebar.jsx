@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-// import { MdSpeed } from 'react-icons/md'; // Speedometer icon
 import { FaPuzzlePiece } from 'react-icons/fa'; // Puzzle icon
-import { AiOutlineCloudDownload } from 'react-icons/ai'; // Cloud Download icon
+// import { AiOutlineCloudDownload } from 'react-icons/ai'; // Cloud Download icon
 import { GiCube } from 'react-icons/gi'; // Cube icon
-import { FaUsers } from 'react-icons/fa'; // Users icon (for Clients)
+// import { FaUsers } from 'react-icons/fa'; // Users icon (for Clients)
 import { AiFillEyeInvisible } from 'react-icons/ai';
+import { FaNetworkWired } from 'react-icons/fa';
+import { FaUserTie } from 'react-icons/fa';
+import { ImPriceTag } from "react-icons/im"
 import { Link } from 'react-router-dom'; 
 import '../Sidebar/SampleSidebar.css';
 
@@ -29,10 +31,10 @@ const SampleSidebar = () => {
       </Link>
 
       {/* Dashboard Icon with Title */}
-      <Link to="/dashboard" className="sidebar-item" onClick={() => handleClick()}>
+      {/* <Link to="/dashboard" className="sidebar-item" onClick={() => handleClick()}>
         <FaPuzzlePiece className="sidebar-icon" />
         <span className="sidebar-title">Dashboard</span>
-      </Link>
+      </Link> */}
 
       {/* Orders Icon with Title */}
       {/* <Link to="/orders" className="sidebar-item" onClick={() => handleClick()}>
@@ -43,12 +45,21 @@ const SampleSidebar = () => {
       {/* Services Icon with Title */}
       <Link to="/service" className="sidebar-item" onClick={() => handleClick()}>
         <GiCube className="sidebar-icon" />
-        <span className="sidebar-title">Services</span>
+        <span className="sidebar-title">Resources</span>
+      </Link>
+
+      <Link to="/community" className="sidebar-item" onClick={() => handleClick()}>
+        <FaNetworkWired className="sidebar-icon" />
+        <span className="sidebar-title">Community</span>
+      </Link>
+      <Link to="/pricing" className="sidebar-item" onClick={() => handleClick()}>
+        <ImPriceTag className="sidebar-icon" /> 
+        <span className="sidebar-title">Pricing</span>
       </Link>
 
       {/* Clients Icon with Title */}
       <Link to="/customers" className="sidebar-item" onClick={() => handleClick()}>
-        <FaUsers className="sidebar-icon" />
+        <FaUserTie className="sidebar-icon" />
         <span className="sidebar-title">Clients</span>
       </Link>
     </div>

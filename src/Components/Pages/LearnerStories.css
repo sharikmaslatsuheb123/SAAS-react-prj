@@ -1,0 +1,98 @@
+.learner-stories-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  gap: 20px;
+  background-color: #f5f7fa;
+  text-align: center;
+  flex-wrap: wrap;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.learner-card {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  max-width: 320px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+.learner-card:hover {
+  transform: translateY(-5px);
+}
+
+.badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #ffd700;
+  color: #000;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.learner-image {
+  width: 120px; /* Image size */
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ffffff;
+}
+
+.card-body {
+  padding: 15px;
+}
+
+
+
+.story-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #333333;
+}
+
+.story-info {
+  font-size: 12px;
+  color: #666666;
+  margin-bottom: 10px;
+}
+
+.divider {
+  margin: 0 5px;
+  color: #cccccc;
+}
+
+.story-description {
+  font-size: 14px;
+  color: #555555;
+  line-height: 1.6;
+}
+
+
+
+
+
+/* .story-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.story-name {
+  font-size: 1.5rem;
+  color: #4a90e2;
+  margin: 10px 0;
+}
+
+.story-text {
+  font-size: 1rem;
+  color: #555;
+} */
+
+

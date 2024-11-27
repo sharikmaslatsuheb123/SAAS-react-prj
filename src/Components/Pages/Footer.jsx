@@ -9,7 +9,7 @@ const Footer = () => {
       <div className="footer-content">
         {/* Logo or Brand Name */}
         <div className="footer-logo">
-          <h2>Brand</h2>
+          <h2>E-Learn</h2>
         </div>
 
         {/* Navigation Links */}
@@ -38,14 +38,14 @@ const Footer = () => {
 
         {/* Contact Information */}
         <div className="footer-contact">
-          <p>Email: info@yourbrand.com</p>
+          <p>Email: info@ELearn.com</p>
           <p>Phone: (123) 456-7890</p>
         </div>
       </div>
 
       {/* Footer Bottom */}
       <div className="footer-bottom">
-        <p>&copy; 2024 Your Brand. All Rights Reserved.</p>
+        <p>&copy; 2024-2025 E-Learn. All Rights Reserved.</p>
       </div>
     </footer>
   );

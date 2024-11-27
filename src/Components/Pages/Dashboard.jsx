@@ -1,68 +1,121 @@
-import React, { useState, useEffect } from 'react';
-import { useUser } from '../UserContext/UserProvider';
-import { addItem, getUserById } from '../Services/dashboardservice';
+import React, { useState, useEffect, useCallback } from 'react';
+import { addItem, getUserById, updateItem, deleteItem } from '../Services/dashboardservice'; // Assuming `updateItem` and `deleteItem` are defined in the service
 import './Dashboard.css';
 
 const Dashboard = () => {
-  const { user } = useUser();
-  const userId = user?.userId; // Ensure `user?.id` is defined in your UserContext
   const [userItems, setUserItems] = useState([]);
   const [newItem, setNewItem] = useState({ name: '', description: '', qty: 1 });
+  const [editItem, setEditItem] = useState({ id: '', name: '', description: '', qty: 1 });
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
+  const userId = localStorage.getItem('userId'); // Get userId from localStorage
+
+  // Fetch user items from the backend
+  const fetchUserItems = useCallback(() => {
+    if (userId) {
+      getUserById(userId)
+        .then((data) => {
+          console.log("Fetched items:", data); // Log the response to check
+          if (data) {
+            setUserItems(data); // Update state with the items from the API
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching user items:', error);
+          setUserItems([]); // Fallback to empty array in case of error
+        });
+    }
+  }, [userId]);
+
+  // useEffect to fetch user items whenever userId changes or on initial load
+  useEffect(() => {
+    if (userId) {
+      fetchUserItems(); // Call the optimized fetch function
+    }
+  }, [userId, fetchUserItems]);
+
+  // Handle adding new item
   const handleAddItem = async (e) => {
     e.preventDefault();
     if (newItem.name && newItem.qty > 0) {
       try {
-        console.log(userId);
-        const response = await addItem(userId, newItem); // Add item to backend
-        const addedItem = {
-          id: response.item.id,
-          userId: response.item.userId,
-          itemName: response.item.itemName,
-          description: response.item.description,
-          quantity: response.item.quantity,
-        };
-        // Instead of directly setting the item in the state, we will fetch the updated list
-        setNewItem({ name: '', description: '', qty: 1 }); // Reset the input fields
-        // Refetch the user's items after adding the new item
-        fetchUserItems(userId);
+        const response = await addItem(userId, newItem);
+        if (response && response.item) {
+          setNewItem({ name: '', description: '', qty: 1 });
+          fetchUserItems();
+        }
       } catch (error) {
         console.error('Error adding item:', error);
       }
     }
   };
 
-  // Fetch user items from the backend
-  const fetchUserItems = (userId) => {
-    if (userId) {
-      console.log('Fetching user items for userId:', userId); // Log userId for debugging
+  // Handle input change for adding new item
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewItem((prev) => ({
+      ...prev,
+      [name]: name === 'qty' ? Number(value) : value,
+    }));
+  };
 
-      getUserById(userId)
-        .then((data) => {
-          console.log('Fetched user items:', data); // Log the fetched data
-          if (data && Array.isArray(data.items)) {
-            setUserItems(data.items); // Set the fetched items
-          } else {
-            console.error('Invalid data format:', data); // Log invalid data format
-            setUserItems([]); // Set to empty array if data format is incorrect
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching user items:', error); // Log the error
-          setUserItems([]); // Fallback to empty array in case of error
-        });
+  // Handle input change for editing an item
+  const handleEditInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditItem((prev) => ({
+      ...prev,
+      [name]: name === 'qty' ? Number(value) : value,
+    }));
+  };
+
+  // Open the edit modal with the item data
+  const openEditModal = (item) => {
+    setEditItem({
+      id: item.id,
+      name: item.item_name,
+      description: item.description,
+      qty: item.quantity,
+    });
+    setShowEditModal(true);
+  };
+
+  // Handle updating an item
+  const handleUpdateItem = async (e) => {
+    e.preventDefault();
+    try {
+      const response = 
+      await updateItem(editItem.id, editItem);
+      if (response && response.item) {
+        setShowEditModal(false);
+        fetchUserItems();
+      }
+    } catch (error) {
+      console.error('Error updating item:', error);
     }
   };
 
-  // useEffect to fetch user items whenever userId changes
-  useEffect(() => {
-    if (userId) {
-      fetchUserItems(userId);
+  // Open the delete confirmation modal
+  const openDeleteModal = (itemId) => {
+    console.log(itemId);
+    setItemToDelete(itemId);
+    setShowDeleteModal(true);
+  };
+
+  // Handle deleting an item
+  const handleDeleteItem = async () => {
+    try {
+      await deleteItem(itemToDelete);
+      setShowDeleteModal(false);
+      fetchUserItems();
+    } catch (error) {
+      console.error('Error deleting item:', error);
     }
-  }, [userId]); // Dependency on userId to re-fetch if it changes
+  };
 
   return (
-    <div className="dashboard-container container mt-5 p-4">
+    <div className="dashboard-container mt-5 p-4">
       <h1 className="dashboard-title text-center mb-4">Dashboard</h1>
 
       {/* Form to add new item */}
@@ -75,7 +128,7 @@ const Dashboard = () => {
               placeholder="Enter Item Name"
               name="name"
               value={newItem.name}
-              onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+              onChange={handleInputChange}
               required
             />
           </div>
@@ -86,7 +139,7 @@ const Dashboard = () => {
               placeholder="Enter Description"
               name="description"
               value={newItem.description}
-              onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
+              onChange={handleInputChange}
             />
           </div>
           <div className="col-md-2">
@@ -96,13 +149,15 @@ const Dashboard = () => {
               placeholder="Quantity"
               name="qty"
               value={newItem.qty}
-              onChange={(e) => setNewItem({ ...newItem, qty: Number(e.target.value) })}
+              onChange={handleInputChange}
               min="1"
               required
             />
           </div>
           <div className="col-md-2">
-            <button type="submit" className="btn btn-lg btn-primary w-100">Add Item</button>
+            <button type="submit" className="btn btn-lg btn-primary w-100">
+              Add Item
+            </button>
           </div>
         </div>
       </form>
@@ -115,6 +170,7 @@ const Dashboard = () => {
             <th>Item Name</th>
             <th>Description</th>
             <th>Qty</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -122,18 +178,112 @@ const Dashboard = () => {
             userItems.map((item, index) => (
               <tr key={item.id}>
                 <td>{index + 1}</td>
-                <td>{item.itemName}</td>
+                <td>{item.item_name}</td>
                 <td>{item.description}</td>
                 <td>{item.quantity}</td>
+                <td>
+                  <button className="btn btn-warning" onClick={() => openEditModal(item)}>
+                    Update
+                  </button>
+                  <button className="btn btn-danger ms-2" onClick={() => openDeleteModal(item.id)}>
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="4" className="text-center py-3">No items added.</td>
+              <td colSpan="5" className="text-center py-3">
+                No items added.
+              </td>
             </tr>
           )}
         </tbody>
       </table>
+
+      {/* Edit Modal */}
+      {showEditModal && (
+        <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="editModalLabel">Edit Item</h5>
+                <button type="button" className="btn-close" onClick={() => setShowEditModal(false)} aria-label="Close"></button>
+              </div>
+              <form onSubmit={handleUpdateItem}>
+                <div className="modal-body">
+                  <div className="mb-3">
+                    <label className="form-label">Item Name</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="name"
+                      value={editItem.name}
+                      onChange={handleEditInputChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Description</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="description"
+                      value={editItem.description}
+                      onChange={handleEditInputChange}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Quantity</label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      name="qty"
+                      value={editItem.qty}
+                      onChange={handleEditInputChange}
+                      min="1"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-secondary" onClick={() => setShowEditModal(false)}>
+                    Close
+                  </button>
+                  <button type="submit" className="btn btn-primary">
+                    Update Item
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" className="btn-close" onClick={() => setShowDeleteModal(false)} aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+                Are you sure you want to delete this item?
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => setShowDeleteModal(false)}>
+                  Cancel
+                </button>
+                <button type="button" className="btn btn-danger" onClick={handleDeleteItem}>
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

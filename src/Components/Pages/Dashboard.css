@@ -50,7 +50,7 @@
 }
 
 .sidebar-open .dashboard-content {
-  margin-left: 250px; /* Adjust this width to match sidebar width */
+  margin-left: 50px; /* Adjust this width to match sidebar width */
 }
 
 .dashboard-content {

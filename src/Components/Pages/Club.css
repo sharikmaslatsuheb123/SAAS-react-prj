@@ -1,0 +1,60 @@
+.clubs-container {
+  padding: 20px;
+  background-color: #f9fbfc;
+  text-align: center;
+}
+
+.clubs-header {
+  font-size: 2.5rem;
+  color: #2a2a2a;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.clubs-description {
+  font-size: 1.2rem;
+  color: #4a4a4a;
+  margin-bottom: 30px;
+}
+
+.clubs-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.club-card {
+  width: 300px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  padding: 15px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.club-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+}
+
+.club-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.club-name {
+  font-size: 1.5rem;
+  color: #007bff;
+  margin: 15px 0 10px;
+  font-weight: bold;
+}
+
+.club-description {
+  font-size: 1rem;
+  color: #6c757d;
+}

@@ -1,6 +1,7 @@
 /* General Styles for Static Full-Page Background */
 .background-container {
-    background-image: url('../Assets/background.jpg');
+    /* background-image: url('../Assets/background.jpg'); */
+    background-color: #FFF0E5;
     background-size: cover; 
     background-position: center; 
     background-repeat: no-repeat; 
@@ -21,8 +22,8 @@
 
 /* Card Styles */
 .card {
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* border-radius: 8px; */
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
     /* max-width: 500px; 
     width: 100%; 
     padding: 20px;  */

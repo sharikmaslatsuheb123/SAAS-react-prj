@@ -1,58 +1,37 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { loginUser, signupUser } from '../Services/userService';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const UserContext = createContext();
 
+export const useUser = () => useContext(UserContext);
+
 export const UserProvider = ({ children }) => {
-  const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (user) {
-      navigate('/dashboard'); // Redirect to dashboard if user is logged in
-    }
-  }, [user, navigate]);
-
-  const login = async (email, password) => {
-    try {
-      const userData = await loginUser(email, password);
-      setUser(userData);
-      return true;
-    } catch (err) {
-      setError('Invalid credentials');
-      return false;
-    }
+  const login = (userData) => {
+    setUser(userData); // Update global user state
+    localStorage.setItem('userId', userData.userId);
+    localStorage.setItem('userName', userData.userName);
+    localStorage.setItem('email', userData.email);
   };
 
   const logout = () => {
-    setUser(null);
-    navigate('/'); // Redirect to home
+    setUser(null); // Clear user state
+    localStorage.clear(); // Clear all local storage
   };
 
-  const signup = async (newUser) => {
-    try {
-      const userData = await signupUser(newUser);
-      setUser(userData);
-      alert('Sign up successful');
-      navigate('/signin');
-    } catch (err) {
-      setError('Error during sign-up');
+  useEffect(() => {
+    // Load user from localStorage on initial render
+    const userId = localStorage.getItem('userId');
+    const userName = localStorage.getItem('userName');
+    const email = localStorage.getItem('email');
+    if (userId && userName && email) {
+      setUser({ userId, userName, email });
     }
-  };
+  }, []);
 
   return (
-    <UserContext.Provider value={{ user, error, login, logout, signup }}>
+    <UserContext.Provider value={{ user, login, logout }}>
       {children}
     </UserContext.Provider>
   );
-};
-
-export const useUser = () => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error('useUser must be used within a UserProvider');
-  }
-  return context;
 };

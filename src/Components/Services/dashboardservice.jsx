@@ -28,9 +28,9 @@ export const addItem = async (userId, item) => {
   }
 };
 
-export const deleteItem = async (userId, itemId) => {
+export const deleteItem = async (itemId) => {
   try {
-    const response = await axios.delete(`${BASE_URL}/${userId}/${itemId}`);
+    const response = await axios.delete(`${BASE_URL}/${itemId}`);
     return response.data;
   } catch (error) {
     console.error('Error deleting item:', error);
@@ -38,9 +38,9 @@ export const deleteItem = async (userId, itemId) => {
   }
 };
 
-export const updateItemQuantity = async (userId, itemId, quantity) => {
+export const updateItem = async (itemId, editedItem) => {
   try {
-    const response = await axios.patch(`${BASE_URL}/${userId}/${itemId}`, { quantity });
+    const response = await axios.put(`${BASE_URL}/${itemId}`, { editedItem });
     return response.data;
   } catch (error) {
     console.error('Error updating item quantity:', error);

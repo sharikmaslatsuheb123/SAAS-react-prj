@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { getItems, addItem, deleteItem,updateItemQuantity } from '../Services/dashboardservice';
+import { getItems, addItem, deleteItem } from '../Services/dashboardservice';
 import { useUser } from './UserProvider';
 
 const DataContext = createContext();
@@ -42,26 +42,10 @@ export const DataProvider = ({ children }) => {
     }
   };
 
-  const increaseItemQty = async (itemId) => {
-    try {
-      const updatedItem = await updateItemQuantity(userId, itemId, 'increase');
-      setItemsByUser((prevItems) => prevItems.map(item => item.id === itemId ? updatedItem : item));
-    } catch (error) {
-      console.error('Error increasing item quantity:', error);
-    }
-  };
 
-  const decreaseItemQty = async (itemId) => {
-    try {
-      const updatedItem = await updateItemQuantity(userId, itemId, 'decrease');
-      setItemsByUser((prevItems) => prevItems.map(item => item.id === itemId ? updatedItem : item));
-    } catch (error) {
-      console.error('Error decreasing item quantity:', error);
-    }
-  };
 
   return (
-    <DataContext.Provider value={{ itemsByUser, addNewItem, deleteUserItem,increaseItemQty,decreaseItemQty }}>
+    <DataContext.Provider value={{ itemsByUser, addNewItem, deleteUserItem }}>
       {children}
     </DataContext.Provider>
   );

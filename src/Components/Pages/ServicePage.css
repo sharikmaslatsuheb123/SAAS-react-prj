@@ -1,0 +1,92 @@
+/* Section Layout */
+.service-section {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd; /* Adds border between rows */
+  padding: 10px 0; /* Adds vertical padding */
+}
+
+.service-section:last-child {
+  border-bottom: none; /* Removes border after the last section */
+}
+
+/* Left Section */
+.service-section-left {
+  flex: 1;
+  background-color: #111; /* Dark background */
+  color: white;
+  padding: 15px; /* Adds inner padding */
+  margin-right: 20px; /* Adds gap between left and right sections */
+}
+
+/* Right Section */
+.service-section-right {
+  flex: 2;
+  display: flex;
+  gap: 30px; /* Adds space between the columns */
+  padding: 10px 0; /* Adds vertical padding for better alignment */
+}
+
+/* Columns */
+.service-columns {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px; /* Gap between columns */
+}
+
+.service-column {
+  list-style: none;
+  padding: 0;
+  flex: 1;
+}
+
+/* Column Items */
+.service-column li {
+  margin-bottom: 15px; /* Adds spacing between items */
+}
+
+/* Specific Links for Programming Languages */
+.service-column li a {
+  text-decoration: none; /* Remove underline */
+  color: inherit; /* Inherit color from the surrounding text (neutral) */
+  transition: color 0.3s ease; /* Smooth color change on hover */
+}
+
+.service-column li a:hover {
+  color: blue; /* Change to blue on hover */
+  text-decoration: none; /* Ensure underline does not appear on hover */
+}
+
+/* Column Titles and Descriptions */
+.service-column strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 5px; /* Space between title and description */
+}
+
+.service-column p {
+  margin: 0;
+  font-size: 14px;
+  color: #666; /* Optional: lighter color for descriptions */
+}
+
+/* General Links */
+.service-link {
+  color: orange; /* Link color set to orange */
+  text-decoration: none;
+  transition: color 0.3s ease; /* Smooth transition for color change */
+}
+
+.service-link:hover {
+  color: blue; /* Change to blue on hover */
+}
+
+/* New Badge */
+.new-badge {
+  background-color: red;
+  color: white;
+  padding: 0 5px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
