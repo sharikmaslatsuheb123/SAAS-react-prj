@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css'; // Import custom CSS for the Navbar
-
+import logo from '../Assets/14_Education.jpg';
 
 const Navbar = () => {
-  // Initialize user state from localStorage
   const [user, setUser] = useState(() => {
     const userData = {
       userId: localStorage.getItem('userId'),
@@ -19,7 +18,6 @@ const Navbar = () => {
 
   const navigate = useNavigate();
 
-  // Update user state if localStorage changes
   useEffect(() => {
     const handleStorageChange = () => {
       const userData = {
@@ -32,7 +30,6 @@ const Navbar = () => {
 
     window.addEventListener('storage', handleStorageChange);
 
-    // Cleanup listener on unmount
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
@@ -46,21 +43,24 @@ const Navbar = () => {
   );
 
   const logout = () => {
-    // Clear user data from localStorage and reset user state
     localStorage.clear();
-    setUser(null); // Reset the user state after logout
+    setUser(null);
     navigate('/signin');
   };
-
-  // const handleDashboardNavigation = () => {
-  //   navigate('/dashboard');
-  // };
 
   return (
     <div className="navbar-container fixed-top">
       <div className="card text-center">
-        <div className="card-header">
-          <ul className="nav nav-tabs card-header-tabs">
+        <div className="card-header d-flex align-items-center">
+          {/* Logo Section */}
+          <div className="logo-container">
+            <Link to="/">
+              <img src={logo} alt="LearnHub Logo" className="navbar-logo" />
+            </Link>
+          </div>
+
+          {/* Navigation Tabs */}
+          <ul className="nav nav-tabs card-header-tabs mx-auto">
             <li className="nav-item">
               <Link
                 className={getLinkClass(user ? '/dashboard' : '/')}
@@ -79,28 +79,28 @@ const Navbar = () => {
                 Contact Us
               </Link>
             </li>
-
-            {/* Right-aligned items (Sign In / Sign Up / Hello User / Logout) */}
-            <div className="nav-item ms-auto">
-              {user ? (
-                <>
-                  <span className="nav-link">Hello, {user.userName}</span>
-                  <button className="btn btn-link nav-link" onClick={logout}>
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link className="nav-link" to="/signin">
-                    Sign In
-                  </Link>
-                  <Link className="nav-link" to="/signup">
-                    Sign Up
-                  </Link>
-                </>
-              )}
-            </div>
           </ul>
+
+          {/* User Section */}
+          <div className="nav-item ms-auto d-flex">
+            {user ? (
+              <>
+                <span className="nav-link">Hello, {user.userName}</span>
+                <button className="btn btn-link nav-link" onClick={logout}>
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link className="nav-link" to="/signin">
+                  Sign In
+                </Link>
+                <Link className="nav-link" to="/signup">
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </div>
         </div>
 
         {showToast && (

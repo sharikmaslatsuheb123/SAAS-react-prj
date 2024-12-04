@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { signupUser } from '../Services/userService'; // Import the signup service
 import { useNavigate } from 'react-router-dom';
-import '../Pages/./commonStyle.css';
+import '../Pages/commonStyle.css';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({

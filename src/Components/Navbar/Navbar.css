@@ -90,3 +90,34 @@
     width: 100%;
   }
 }
+
+/* Logo Styling */
+/* Adjust logo styling */
+.navbar-logo {
+  height: 50px; 
+  width: auto;
+  margin-right: 20px;
+}
+
+/* Center navigation tabs while keeping the logo on the left */
+.logo-container {
+  display: flex;
+
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav-tabs {
+  display: flex;
+  flex-grow: 1; /* Allow tabs to take center space */
+}
+
+.nav-item {
+  margin: 0 10px;
+}
+
+
+
